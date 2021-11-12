@@ -1,5 +1,5 @@
 {
-    "name": "christhomas/eloquent-fluent",
+    "name": "christhomas/floquent",
     "description": "Define model fields, php attributes on eloquent models, create validators for specific fields",
     "type": "library",
     "license": "MIT",
@@ -11,13 +11,13 @@
     ],
     "autoload": {
         "psr-4": {
-            "Eloquent\\Fluent\\": "src/"
+            "Floquent\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Eloquent\\Fluent\\Tests\\": "tests/",
-            "Eloquent\\Fluent\\Tests\\Models\\": "tests/Pest/Models"
+            "Floquent\\Tests\\": "tests/",
+            "Floquent\\Tests\\Models\\": "tests/Pest/Models"
         }
     },
     "require": {
@@ -33,7 +33,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Eloquent\\Fluent\\EloquentFluentServiceProvider"
+                "Floquent\\FloquentServiceProvider"
             ]
         }
     },
