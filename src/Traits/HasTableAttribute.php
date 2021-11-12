@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Eloquent\Fluent\Traits\Eloquent;
+namespace Floquent\Traits;
 
-use Eloquent\Fluent\Attribute\Eloquent\Table;
+use Floquent\Attribute\Table;
 use ReflectionClass;
 
 trait HasTableAttribute

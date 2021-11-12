@@ -1,10 +1,10 @@
 <?php
 
-namespace Eloquent\Fluent;
+namespace Floquent;
 
 use Illuminate\Support\ServiceProvider;
 
-class EloquentFluentServiceProvider extends ServiceProvider
+class FloquentServiceProvider extends ServiceProvider
 {
     public function register(): void
     {

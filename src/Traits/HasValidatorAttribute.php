@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Eloquent\Fluent\Traits\Eloquent;
+namespace Floquent\Traits;
 
-use Eloquent\Fluent\Attribute\Eloquent\Validate;
+use Floquent\Attribute\Validate;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use ReflectionClass;

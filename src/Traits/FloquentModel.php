@@ -1,11 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Eloquent\Fluent\Traits\Eloquent;
+namespace Floquent\Traits;
 
-use Illuminate\Database\Eloquent\Model;
-
-/** @mixin Model */
-trait FluentModel
+/** @mixin \Illuminate\Database\Eloquent\Model */
+trait FloquentModel
 {
     use HasClassProperties,
         HasTableAttribute,

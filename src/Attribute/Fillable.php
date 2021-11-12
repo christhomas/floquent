@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Eloquent\Fluent\Attribute\Eloquent;
+namespace Floquent\Attribute;
 
 use Attribute;
 
