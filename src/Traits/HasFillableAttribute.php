@@ -14,19 +14,31 @@ trait HasFillableAttribute
     public function initializeHasFillableAttribute()
     {
         $reflection = new ReflectionClass($this);
+        $properties = $this->getModelProperty();
 
         if(empty($this->fillable)){
             $this->fillable = [];
         }
 
-        $list = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+        // Process Class
+        $attributes = $reflection->getAttributes(Fillable::class);
+        foreach($attributes as $a){
+            $a = $a->getArguments();
 
-        foreach($list as $property){
-            if(!empty($property->getAttributes(Fillable::class))){
-                $this->fillable[] = $property->getName();
+            if(empty($a)){
+                $properties->each(fn (ReflectionProperty $property) => $this->fillable[] = $property->getName());
+            }else{
+                $this->fillable[] = array_merge($this->fillable, $a);
             }
         }
 
+        // Process Properties
+        $properties
+            ->filter(fn (ReflectionProperty $property) => !empty($property->getAttributes(Fillable::class)))
+            ->each(fn (ReflectionProperty $property) => $this->fillable[] = $property->getName());
+
+        // Make unique
         $this->fillable = array_values(array_unique($this->fillable));
     }
 }
+

@@ -16,24 +16,31 @@ trait HasGuardedAttribute
     public function initializeHasGuardedAttribute()
     {
         $reflection = new ReflectionClass($this);
+        $properties = $this->getModelProperty();
 
         // NOTE: maybe force resetting this to empty is a bit heavy handed?
         $this->guarded = [];
 
+        // Process Class
         $attributes = $reflection->getAttributes(Guarded::class);
 
         foreach($attributes as $a){
-            $this->guarded = array_merge($this->guarded, $a->getArguments());
-        }
+            $a = $a->getArguments();
 
-        $list = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
-
-        foreach($list as $property){
-            if(!empty($property->getAttributes(Guarded::class))){
-                $this->guarded[] = $property->getName();
+            if(empty($a)){
+                $properties->each(fn (ReflectionProperty $property) => $this->guarded[] = $property->getName());
+            }else{
+                $this->guarded = array_merge($this->guarded, $a);
             }
         }
 
+        // Process Properties
+        $properties
+            ->filter(fn (ReflectionProperty $property) => !empty($property->getAttributes(Guarded::class)))
+            ->each(fn (ReflectionProperty $property) => $this->guarded[] = $property->getName());
+
+        // Make unique
         $this->guarded = array_values(array_unique($this->guarded));
     }
 }
+

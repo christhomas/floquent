@@ -2,16 +2,19 @@
 
 namespace Floquent\Traits;
 
+use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
 
 trait HasClassProperties
 {
+    private Collection $properties;
+
     public function initializeHasClassProperties()
     {
         $reflection = new ReflectionClass($this);
 
-        collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
+        $this->properties = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
             // filter properties only belonging to defining class and not subclasses or whatever
             ->filter(fn (ReflectionProperty $property) => $property->getDeclaringClass()->getName() === self::class)
             // reject properties that come from traits that the model imports and are defined as public
@@ -44,7 +47,28 @@ trait HasClassProperties
                     parent::setAttribute($property->getName(), $property->getDefaultValue());
                 }
 
-                unset($this->{$property->getName()});
+                $this->unsetModelProperty($property->getName());
             });
+    }
+
+    public function getModelProperty(?string $name = null): Collection
+    {
+        if(!empty($name)){
+            return $this->properties->filter(fn ($property) => $property->getName() === $name);
+        }else{
+            return $this->properties;
+        }
+    }
+
+    public function hasModelProperty(string $name)
+    {
+        return $this->properties->contains(
+            fn (ReflectionProperty $property) => $property->getName() === $name
+        );
+    }
+
+    public function unsetModelProperty(string $name)
+    {
+        unset($this->{$name});
     }
 }
