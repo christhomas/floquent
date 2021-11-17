@@ -22,7 +22,10 @@ trait HasValidatorAttribute
             $attributes = $property->getAttributes(Validate::class);
 
             foreach($attributes as $a){
-                $this->rules[$property->getName()] = $a->getArguments();
+                $this->rules[$property->getName()] = array_combine(
+                    ['rule', 'message'],
+                    $a->getArguments() + [null, null],
+                );
             }
         });
     }
@@ -65,8 +68,11 @@ trait HasValidatorAttribute
             return;
         }
 
-        Validator::validate([$name => $value], [
-            $name => $this->getValidationRule($name),
-        ]);
+        $config = $this->getValidationRule($name);
+
+        $rules = [$name => $config['rule']];
+        $messages = array_filter([$name => $config['message']]);
+
+        Validator::validate([$name => $value], $rules, $messages);
     }
 }
