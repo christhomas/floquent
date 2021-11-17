@@ -54,6 +54,8 @@ trait HasClassProperties
                 */
             })
             ->each(function (ReflectionProperty $property) {
+                // Push any default property values into the attributes array before unsetting them
+                // Unsetting a property will destroy it's default value.
                 if($property->hasDefaultValue()){
                     parent::setAttribute($property->getName(), $property->getDefaultValue());
                 }
