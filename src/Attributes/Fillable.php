@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Floquent\Attribute;
+namespace Floquent\Attributes;
 
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Validate
+class Fillable
 {
-    public string $name = 'validate';
+    public string $name = 'fillable';
 }

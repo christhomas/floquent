@@ -2,7 +2,7 @@
 
 namespace Floquent\Traits;
 
-use Floquent\Attribute\Guarded;
+use Floquent\Attributes\Guarded;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -43,4 +43,3 @@ trait HasGuardedAttribute
         $this->guarded = array_values(array_unique($this->guarded));
     }
 }
-

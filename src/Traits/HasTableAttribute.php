@@ -2,7 +2,7 @@
 
 namespace Floquent\Traits;
 
-use Floquent\Attribute\Table;
+use Floquent\Attributes\Table;
 use ReflectionClass;
 
 trait HasTableAttribute
@@ -20,13 +20,13 @@ trait HasTableAttribute
             $args = $a->getArguments();
 
             if(empty($args)){
-                throw new \InvalidArgumentException('The Eloquent\Table attribute requires a string $table parameter');
+                throw new \InvalidArgumentException('The Floquent\Attribute\Table attribute requires a string $table parameter');
             }
 
             $table = array_shift($args);
 
             if(empty($table)){
-                throw new \InvalidArgumentException('The Eloquent\Table attribute must not resolve to a null or empty value');
+                throw new \InvalidArgumentException('The Floquent\Attribute\Table attribute must not resolve to a null or empty value');
             }
 
             $this->setTable($table);

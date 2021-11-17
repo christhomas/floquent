@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Floquent\Attribute;
+namespace Floquent\Attributes;
 
 use Attribute;
 

@@ -2,7 +2,7 @@
 
 namespace Floquent\Traits;
 
-use Floquent\Attribute\Fillable;
+use Floquent\Attributes\Fillable;
 use ReflectionClass;
 use ReflectionProperty;
 
@@ -41,4 +41,3 @@ trait HasFillableAttribute
         $this->fillable = array_values(array_unique($this->fillable));
     }
 }
-

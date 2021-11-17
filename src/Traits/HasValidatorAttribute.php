@@ -2,10 +2,10 @@
 
 namespace Floquent\Traits;
 
-use Floquent\Attribute\Validate;
+use Floquent\Attributes\Validate;
+use Floquent\Exceptions\ValidatorRuleNotFoundException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
-use ReflectionClass;
 use ReflectionProperty;
 
 trait HasValidatorAttribute
@@ -14,19 +14,17 @@ trait HasValidatorAttribute
 
     public function initializeHasValidatorAttribute()
     {
-        $reflection = new ReflectionClass($this);
-
-        $list = $reflection->getProperties(ReflectionProperty::IS_PUBLIC);
+        $properties = $this->getModelProperty();
 
         $this->rules = collect();
 
-        foreach($list as $property){
+        $properties->each(function(ReflectionProperty $property) {
             $attributes = $property->getAttributes(Validate::class);
 
             foreach($attributes as $a){
                 $this->rules[$property->getName()] = $a->getArguments();
             }
-        }
+        });
     }
 
     /**
@@ -44,7 +42,7 @@ trait HasValidatorAttribute
             return $this->rules[$name];
         }
 
-        throw new \Exception("The requested property rule '$name' was not found");
+        throw new ValidatorRuleNotFoundException($name);
     }
 
     public function hasValidationRule(string $name): bool
@@ -63,10 +61,12 @@ trait HasValidatorAttribute
      */
     public function validateAttribute(string $name, $value): void
     {
-        if($this->hasValidationRule($name)){
-            Validator::validate([$name => $value], [
-                $name => $this->getValidationRule($name),
-            ]);
+        if(!$this->hasValidationRule($name)) {
+            return;
         }
+
+        Validator::validate([$name => $value], [
+            $name => $this->getValidationRule($name),
+        ]);
     }
 }
