@@ -9,7 +9,8 @@ trait FloquentModel
         HasTableAttribute,
         HasFillableAttribute,
         HasGuardedAttribute,
-        HasValidatorAttribute;
+        HasValidatorAttribute,
+        HasCastAttribute;
 
     /**
      * Overload the method to populate public properties from Model attributes
@@ -18,6 +19,9 @@ trait FloquentModel
      * @param  mixed  $key
      * @param  mixed  $value
      * @return $this
+     *
+     * @throws \Floquent\Exceptions\StrictPropertyAccessException
+     * @throws \Illuminate\Validation\ValidationException
      */
     public function setAttribute($key, $value)
     {
@@ -32,6 +36,8 @@ trait FloquentModel
      *
      * @param  string  $key
      * @return mixed
+     *
+     * @throws \Floquent\Exceptions\StrictPropertyAccessException
      */
     public function getAttribute($key)
     {
@@ -40,11 +46,23 @@ trait FloquentModel
         return parent::getAttribute($key);
     }
 
+    /**
+     * @param $key
+     * @return mixed
+     * @throws \Floquent\Exceptions\StrictPropertyAccessException
+     */
     public function __get($key)
     {
         return $this->getAttribute($key);
     }
 
+    /**
+     * @param $key
+     * @param $value
+     * @return \App\Models\Invoice
+     * @throws \Floquent\Exceptions\StrictPropertyAccessException
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function __set($key, $value)
     {
         return $this->setAttribute($key, $value);
