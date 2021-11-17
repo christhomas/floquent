@@ -22,8 +22,22 @@ trait FloquentModel
     public function setAttribute($key, $value)
     {
         $this->validateAttribute($key, $value);
+        $this->strictPropertyAccess($key);
 
         return parent::setAttribute($key, $value);
+    }
+
+    /**
+     * Get an attribute from the model.
+     *
+     * @param  string  $key
+     * @return mixed
+     */
+    public function getAttribute($key)
+    {
+        $this->strictPropertyAccess($key);
+
+        return parent::getAttribute($key);
     }
 
     public function __get($key)

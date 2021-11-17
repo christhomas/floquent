@@ -2,6 +2,8 @@
 
 namespace Floquent\Traits;
 
+use Floquent\Attributes\StrictPropertyAccess;
+use Floquent\Exceptions\StrictPropertyAccessException;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
@@ -9,11 +11,20 @@ use ReflectionProperty;
 trait HasClassProperties
 {
     private Collection $properties;
+    private bool $hasStrictPropertyAccessEnabled = false;
 
     public function initializeHasClassProperties()
     {
         $reflection = new ReflectionClass($this);
 
+        // Whether or not to restrict property access to only properties defined on the class model directly
+        // This should stop people from adding extra fields which are not defined and the programmer has decided to restrict
+        $attributes = $reflection->getAttributes(StrictPropertyAccess::class);
+        if(!empty($attributes)){
+            $this->hasStrictPropertyAccessEnabled = true;
+        }
+
+        // Process all class properties
         $this->properties = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
             // filter properties only belonging to defining class and not subclasses or whatever
             ->filter(fn (ReflectionProperty $property) => $property->getDeclaringClass()->getName() === self::class)
@@ -53,16 +64,30 @@ trait HasClassProperties
 
     public function getModelProperty(?string $name = null): Collection
     {
-        if(!empty($name)){
-            return $this->properties->filter(fn ($property) => $property->getName() === $name);
-        }else{
+        static $cache = [];
+
+        if(empty($name)) {
             return $this->properties;
         }
+
+        if(array_key_exists($name, $cache)){
+            return $cache[$name];
+        }
+
+        return $cache[$name] = $this->properties->filter(
+            fn ($property) => $property->getName() === $name
+        );
     }
 
     public function hasModelProperty(string $name)
     {
-        return $this->properties->contains(
+        static $cache = [];
+
+        if(array_key_exists($name, $cache)) {
+            return $cache[$name];
+        }
+
+        return $cache[$name] = $this->properties->contains(
             fn (ReflectionProperty $property) => $property->getName() === $name
         );
     }
@@ -70,5 +95,17 @@ trait HasClassProperties
     public function unsetModelProperty(string $name)
     {
         unset($this->{$name});
+    }
+
+    public function strictPropertyAccess(string $name): void
+    {
+        if(!$this->hasStrictPropertyAccessEnabled){
+            return;
+        }
+
+        // throw if property not found
+        if(!$this->hasModelProperty($name)){
+            throw new StrictPropertyAccessException($name);
+        }
     }
 }
