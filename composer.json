@@ -22,13 +22,11 @@
     },
     "require": {
         "php": "^8.0",
-        "illuminate/support": "^8.24"
+        "illuminate/support": "^8.24",
+        "laravel/database": "^8.53"
     },
     "require-dev": {
-        "orchestra/testbench": "^6.9",
-        "nunomaduro/larastan": "^0.6.10",
-        "pestphp/pest": "^1.2",
-        "pestphp/pest-plugin-laravel": "^1.0"
+        "phpunit/phpunit": "^9.5"
     },
     "extra": {
         "laravel": {
@@ -36,9 +34,5 @@
                 "Floquent\\FloquentServiceProvider"
             ]
         }
-    },
-    "scripts": {
-        "test": "./vendor/bin/pest",
-        "stan": "./vendor/bin/phpstan analyse"
     }
 }

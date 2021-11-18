@@ -1,0 +1,9 @@
+#!/usr/bin/env sh
+
+if [ "${FLOQUENT_TESTING_CONTAINER}" = "true" ]; then
+    [ -z "$(command -v composer)" ] && apk add --no-cache composer
+    composer install
+    /project/vendor/bin/phpunit $@
+else
+    docker run -e FLOQUENT_TESTING_CONTAINER=true -v ${PWD}:/project -w /project php:alpine /project/run-tests $@
+fi
