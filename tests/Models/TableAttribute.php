@@ -4,6 +4,7 @@ namespace Floquent\Tests\Models;
 
 use Floquent\Attributes\Table;
 use Floquent\Attributes\Fillable;
+use Floquent\Attributes\NotFillable;
 use Floquent\Traits\FloquentModel;
 use Illuminate\Database\Eloquent\Model;
 
@@ -14,4 +15,7 @@ class TableAttribute extends Model
 
     public int $a;
     public int $b;
+    
+    #[NotFillable]
+    public int $c;
 }
