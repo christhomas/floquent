@@ -4,8 +4,5 @@ namespace Floquent\Attributes;
 
 use Attribute;
 
-#[Attribute(Attribute::TARGET_PROPERTY)]
-class Fillable
-{
-    public string $name = 'fillable';
-}
+#[Attribute(Attribute::TARGET_CLASS|Attribute::TARGET_PROPERTY)]
+class Fillable{}

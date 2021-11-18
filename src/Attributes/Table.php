@@ -5,7 +5,4 @@ namespace Floquent\Attributes;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_CLASS)]
-class Table
-{
-    public string $name = 'table';
-}
+class Table{}
