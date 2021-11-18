@@ -3,14 +3,11 @@
 namespace Floquent\Tests\Models;
 
 use Floquent\Attributes\Fillable;
-use Floquent\Traits\FloquentModel;
-use Illuminate\Database\Eloquent\Model;
+use Floquent\Model\FloquentModel;
 
 #[Fillable]
-class FillableAttributeGlobal extends Model
+class FillableModelGlobal extends FloquentModel
 {
-    use FloquentModel;
-
     public int $a;
     public int $b;
     public int $c;

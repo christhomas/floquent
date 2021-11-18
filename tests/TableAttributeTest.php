@@ -2,14 +2,14 @@
 
 namespace Floquent\Tests;
 
-use Floquent\Tests\Models\TableAttribute;
+use Floquent\Tests\Models\TableModel;
 use PHPUnit\Framework\TestCase;
 
 class TableAttributeTest extends TestCase
 {
     public function testTableAttribute()
     {
-        $t = new TableAttribute();
+        $t = new TableModel();
         
         $this->assertEquals('example', $t->getTable());
     }

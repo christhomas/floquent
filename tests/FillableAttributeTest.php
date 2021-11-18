@@ -2,15 +2,15 @@
 
 namespace Floquent\Tests;
 
-use Floquent\Tests\Models\FillableAttributeGlobal;
-use Floquent\Tests\Models\FillableAttributeProperty;
+use Floquent\Tests\Models\FillableModelGlobal;
+use Floquent\Tests\Models\FillableModelProperty;
 use PHPUnit\Framework\TestCase;
 
 class FillableAttributeTest extends TestCase
 {
     public function testGlobalFillableAttribute()
     {
-        $t = new FillableAttributeGlobal();
+        $t = new FillableModelGlobal();
         
         $list = $t->getFillable();
 
@@ -22,7 +22,7 @@ class FillableAttributeTest extends TestCase
 
     public function testPropertyFillableAttribute()
     {
-        $t = new FillableAttributeProperty();
+        $t = new FillableModelProperty();
         
         $list = $t->getFillable();
 

@@ -4,13 +4,10 @@ namespace Floquent\Tests\Models;
 
 use Floquent\Attributes\Fillable;
 use Floquent\Attributes\NotFillable;
-use Floquent\Traits\FloquentModel;
-use Illuminate\Database\Eloquent\Model;
+use Floquent\Model\FloquentModel;
 
-class FillableAttributeProperty extends Model
+class FillableModelProperty extends FloquentModel
 {
-    use FloquentModel;
-
     public int $a;
     
     #[Fillable]
