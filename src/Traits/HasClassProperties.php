@@ -16,18 +16,12 @@ trait HasClassProperties
     public function initializeHasClassProperties()
     {
         $reflection = new ReflectionClass($this);
-
-        // Whether or not to restrict property access to only properties defined on the class model directly
-        // This should stop people from adding extra fields which are not defined and the programmer has decided to restrict
-        $attributes = $reflection->getAttributes(StrictPropertyAccess::class);
-        if(!empty($attributes)){
-            $this->hasStrictPropertyAccessEnabled = true;
-        }
+        $name = $reflection->getName();
 
         // Process all class properties
         $this->properties = collect($reflection->getProperties(ReflectionProperty::IS_PUBLIC))
             // filter properties only belonging to defining class and not subclasses or whatever
-            ->filter(fn (ReflectionProperty $property) => $property->getDeclaringClass()->getName() === self::class)
+            ->filter(fn (ReflectionProperty $property) => $property->getDeclaringClass()->getName() === $name)
             // reject properties that come from traits that the model imports and are defined as public
             // this limits any public properties from imported traits being used
             // obviously public properties from imported traits aren't part of the model

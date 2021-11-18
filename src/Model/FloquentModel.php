@@ -1,11 +1,21 @@
 <?php declare(strict_types=1);
 
-namespace Floquent\Traits;
+namespace Floquent\Model;
 
-/** @mixin \Illuminate\Database\Eloquent\Model */
-trait FloquentModel
+use Floquent\Traits\HasCastAttribute;
+use Floquent\Traits\HasClassProperties;
+use Floquent\Traits\HasFillableAttribute;
+use Floquent\Traits\HasGuardedAttribute;
+use Floquent\Traits\HasNotFillableAttribute;
+use Floquent\Traits\HasStrictPropertyAccessAttribute;
+use Floquent\Traits\HasTableAttribute;
+use Floquent\Traits\HasValidatorAttribute;
+use Illuminate\Database\Eloquent\Model;
+
+class FloquentModel extends Model
 {
     use HasClassProperties,
+        HasStrictPropertyAccessAttribute,
         HasTableAttribute,
         HasFillableAttribute,
         HasNotFillableAttribute,
