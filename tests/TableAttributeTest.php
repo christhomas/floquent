@@ -13,16 +13,4 @@ class TableAttributeTest extends TestCase
         
         $this->assertEquals('example', $t->getTable());
     }
-
-    public function testFillableAttribute()
-    {
-        $t = new TableAttribute();
-        
-        $list = $t->getFillable();
-
-        $this->assertIsArray($list);
-        $this->assertContains('a', $list);
-        $this->assertContains('b', $list);
-        $this->assertNotContains('c', $list);
-    }
 }

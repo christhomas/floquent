@@ -2,12 +2,16 @@
 
 namespace Floquent\Tests\Models;
 
-use Floquent\Attributes\Table;
+use Floquent\Attributes\Fillable;
 use Floquent\Traits\FloquentModel;
 use Illuminate\Database\Eloquent\Model;
 
-#[Table('example')]
-class TableAttribute extends Model
+#[Fillable]
+class FillableAttributeGlobal extends Model
 {
     use FloquentModel;
+
+    public int $a;
+    public int $b;
+    public int $c;
 }
