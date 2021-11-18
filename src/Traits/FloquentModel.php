@@ -8,6 +8,7 @@ trait FloquentModel
     use HasClassProperties,
         HasTableAttribute,
         HasFillableAttribute,
+        HasNotFillableAttribute,
         HasGuardedAttribute,
         HasValidatorAttribute,
         HasCastAttribute;
