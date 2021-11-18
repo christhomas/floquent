@@ -2,8 +2,6 @@
 
 namespace Floquent\Traits;
 
-use Floquent\Attributes\StrictPropertyAccess;
-use Floquent\Exceptions\StrictPropertyAccessException;
 use Illuminate\Support\Collection;
 use ReflectionClass;
 use ReflectionProperty;
@@ -11,7 +9,6 @@ use ReflectionProperty;
 trait HasClassProperties
 {
     private Collection $properties;
-    private bool $hasStrictPropertyAccessEnabled = false;
 
     public function initializeHasClassProperties()
     {
@@ -91,17 +88,5 @@ trait HasClassProperties
     public function unsetModelProperty(string $name)
     {
         unset($this->{$name});
-    }
-
-    public function strictPropertyAccess(string $name): void
-    {
-        if(!$this->hasStrictPropertyAccessEnabled){
-            return;
-        }
-
-        // throw if property not found
-        if(!$this->hasModelProperty($name)){
-            throw new StrictPropertyAccessException($name);
-        }
     }
 }
