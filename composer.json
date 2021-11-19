@@ -16,8 +16,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Floquent\\Tests\\": "tests/",
-            "Floquent\\Tests\\Models\\": "tests/Pest/Models"
+            "Floquent\\Tests\\": "tests/"
         }
     },
     "require": {
