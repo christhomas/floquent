@@ -1,9 +1,35 @@
 #!/usr/bin/env sh
+set -x
+name=floquent_testing
+timeout=3600
 
-if [ "${FLOQUENT_TESTING_CONTAINER}" = "true" ]; then
-    [ -z "$(command -v composer)" ] && apk add --no-cache composer
+function inspect () {
+    docker inspect ${name} &>/dev/null && echo yes
+}
+
+if [ "$1" == "stop" ]; then
+    [ "$(inspect)" = "yes" ] && echo "killing '${name}'" && docker kill ${name}
+    docker ps
+    exit 0
+fi
+
+if [ "$1" == "build" ]; then
+    apk add --no-cache composer
+    apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
+    yes '' | pecl install apcu xdebug
+    docker-php-ext-enable apcu xdebug
+    apk del -f .build-deps
     composer install
-    /project/vendor/bin/phpunit $@
-else
-    docker run --rm -e FLOQUENT_TESTING_CONTAINER=true -v ${PWD}:/project -w /project php:alpine /project/run-tests $@
+    exit 0
+fi
+
+# Only start container if it's not already running
+if [ "$(inspect)" = "" ]; then
+    docker run -d --rm --name ${name} -e XDEBUG_MODE=coverage -v ${PWD}:/project -w /project php:fpm-alpine sleep ${timeout}
+    docker exec -it ${name} /project/run-tests build
+fi
+
+# Only execute tests, if the container is detected running
+if [ "$(inspect)" = "yes" ]; then
+    docker exec -it ${name} /project/vendor/bin/phpunit $@
 fi
