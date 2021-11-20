@@ -69,9 +69,9 @@ class Users extends Model
     public string $email;
 
     #[NotFillable]
-    public function $firstName;
+    public string $firstName;
 
     #[Cast('datetime:H:i:s Y-m-d')]
-    public function $signupDate;
+    public \DateTime $signupDate;
 }
 ```
