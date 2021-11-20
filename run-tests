@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -x
+
 name=floquent_testing
 timeout=3600
 
@@ -7,29 +7,40 @@ function inspect () {
     docker inspect ${name} &>/dev/null && echo yes
 }
 
-if [ "$1" == "stop" ]; then
-    [ "$(inspect)" = "yes" ] && echo "killing '${name}'" && docker kill ${name}
-    docker ps
-    exit 0
-fi
-
-if [ "$1" == "build" ]; then
+if [ "$1" == "stop" ]; then 
+    if [ "$(inspect)" = "yes" ]; then 
+        # if running docker, stop the container, otherwise just exit harmlessly
+        echo "killing '${name}'"
+        docker kill ${name}
+        docker ps
+    fi
+elif [ "$1" == "no-docker" ]; then
+    # if running without docker
+    
+    # but we still require composer to be installed
+    if [ -z "$(command -v composer)" ]; then
+        echo "php composer must be installed"
+    else
+        composer install
+        ./vendor/bin/phpunit $@
+    fi
+elif [ "$1" == "build" ]; then
+    # docker builds require first setting up the container with the right runtime tools
     apk add --no-cache composer
     apk add --no-cache --virtual .build-deps $PHPIZE_DEPS
     yes '' | pecl install apcu xdebug
     docker-php-ext-enable apcu xdebug
     apk del -f .build-deps
     composer install
-    exit 0
-fi
+else
+    # Only start container if it's not already running
+    if [ "$(inspect)" = "" ]; then
+        docker run -d --rm --name ${name} -e XDEBUG_MODE=coverage -v ${PWD}:/project -w /project php:fpm-alpine sleep ${timeout}
+        docker exec -it ${name} /project/run-tests build
+    fi
 
-# Only start container if it's not already running
-if [ "$(inspect)" = "" ]; then
-    docker run -d --rm --name ${name} -e XDEBUG_MODE=coverage -v ${PWD}:/project -w /project php:fpm-alpine sleep ${timeout}
-    docker exec -it ${name} /project/run-tests build
-fi
-
-# Only execute tests, if the container is detected running
-if [ "$(inspect)" = "yes" ]; then
-    docker exec -it ${name} /project/vendor/bin/phpunit $@
+    # Only execute tests, if the container is detected running
+    if [ "$(inspect)" = "yes" ]; then
+        docker exec -it ${name} /project/vendor/bin/phpunit $@
+    fi
 fi
