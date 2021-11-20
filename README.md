@@ -10,6 +10,33 @@ Define eloquent model fields, allow php attributes on eloquent models, create va
 - ```#[Guarded]```
 - ```#[Validate('number|gte:0`)]```
 
+
+# Example Usage
+See description of each attribute for detailed information
+
+```php
+<?php declare(strict_types=1);
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+#[Table('users'), StrictPropertyAccess, Fillable, Guarded]
+class Users extends Model
+{
+    #[Guarded]
+    public int $id;
+
+    #[Fillable, Validate('email')]
+    public string $email;
+
+    #[NotFillable]
+    public string $firstName;
+
+    #[Cast('datetime:H:i:s Y-m-d')]
+    public \DateTime $signupDate;
+}
+```
+
 # Testing
 The ```run-tests``` script can be used to execute the tests, it has the following options.
 
@@ -20,7 +47,7 @@ By default the tests run inside a docker container, this is to help people who d
 - ```./run-tests no-docker``` Run the tests but on the local machine, but this requires PHP 8 to be installed
 - ```./run-tests stop``` Stop the testing docker container if it's running, otherwise in 3600 seconds (1 hour), it'll automatically stop
 
-# Description
+# Attribute Description
 ## Table
 Configure the ```$this->table``` Eloquent property that will be used with this model
 
@@ -49,29 +76,3 @@ Adds to a list of validation rules, that when the programmer set properties on t
 
 ## Cast
 This will add to the ```$model->casts[]``` Eloquent property setting how to cast information according to the Eloquent casts array.
-
-# Example Usage
-See description of each attribute for detailed information
-
-```php
-<?php declare(strict_types=1);
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Model;
-
-#[Table('users'), StrictPropertyAccess, Fillable, Guarded]
-class Users extends Model
-{
-    #[Guarded]
-    public int $id;
-
-    #[Fillable, Validate('email')]
-    public string $email;
-
-    #[NotFillable]
-    public string $firstName;
-
-    #[Cast('datetime:H:i:s Y-m-d')]
-    public \DateTime $signupDate;
-}
-```
