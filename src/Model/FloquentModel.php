@@ -2,6 +2,7 @@
 
 namespace Floquent\Model;
 
+use Floquent\Traits\HasAppendsAttribute;
 use Floquent\Traits\HasCastAttribute;
 use Floquent\Traits\HasClassProperties;
 use Floquent\Traits\HasFillableAttribute;
@@ -21,7 +22,8 @@ class FloquentModel extends Model
         HasNotFillableAttribute,
         HasGuardedAttribute,
         HasValidatorAttribute,
-        HasCastAttribute;
+        HasCastAttribute,
+        HasAppendsAttribute;
 
     /**
      * Overload the method to populate public properties from Model attributes
